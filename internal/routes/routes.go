@@ -12,7 +12,7 @@ import (
 )
 
 func Routes() *chi.Mux {
-
+	
 	log := utils.GetLogger()
 	log.Info("in routes/Routes(), initializing new chi router")
 	router := chi.NewRouter()

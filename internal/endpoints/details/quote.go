@@ -1,48 +1,46 @@
 package details
 
 import (
-	"github.com/stock-details-api/internal/models"
-	"io/ioutil"
-	"github.com/gorilla/mux"
-	"github.com/stock-details-api/internal/constants"
-	"time"
-	"net/http"
 	"encoding/json"
+	"io/ioutil"
+	"net/http"
+
+	"github.com/stock-details-api/internal/models"
+
+	"github.com/go-chi/chi"
+
+	"github.com/stock-details-api/internal/constants"
 	"github.com/stock-details-api/internal/utils"
 )
 
-func FindQuoteByTicker(w http.ResponseWriter, r *http.Request) {
-	log:= utils.GetLogger()
+func findQuoteByTicker(w http.ResponseWriter, r *http.Request) {
+	log := utils.GetLogger()
 	log.Info("details.findQuoteByTicker() reached ...")
-	vars := mux.Vars(r)
+	println("GET parameters string : ", chi.URLParam(r, "ticker"))
 
-	stockClient:= http.Client{Timeout: time.Second * 2,}
+	stockClient := http.Client{}
+	req, err := http.NewRequest("GET", constants.BaseAlphaVantageUri+"function=GLOBAL_QUOTE&symbol="+chi.URLParam(r, "ticker")+"&apikey="+constants.AlphaVantageApiKey, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	println("Making request to : ", constants.BaseAlphaVantageUri+"function=GLOBAL_QUOTE&symbol="+chi.URLParam(r, "ticker")+"&apikey="+constants.AlphaVantageApiKey)
 
-	req, err :=http.NewRequest(http.MethodGet, constants.BaseAlphaVantageUri + "/unction=GLOBAL_QUOTE&symbol=" + vars["ticker"] + "/&apikey=" + constants.AlphaVantageApiKey, nil)
+	req.Header.Add("Content-Type", "application/json")
+	resp, err := stockClient.Do(req)
+
+	respBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var Quote models.QuoteResponse
+	err = json.Unmarshal(respBytes, &Quote)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	res, err := stockClient.Do(req)
+	QuoteJSON, err := json.Marshal(Quote)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	quoteResponse := models.GlobalQuote{}
-	jsonErr := json.Unmarshal(body, &quoteResponse)
-	if jsonErr != nil {
-		log.Fatal(err)
-	}
-
-	quoteResponseJSON, err := json.Marshal(&quoteResponse)
-	if err != nil {
-		log.Fatal(err)
-	 }
-
-	print(string(quoteResponseJSON))
+	w.Write(QuoteJSON)
 }

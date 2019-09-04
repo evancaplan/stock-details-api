@@ -3,7 +3,6 @@ package main
 import(
 	"net/http"
 	"github.com/stock-details-api/internal/utils"
-	"github.com/stock-details-api/internal/routes"
 )
 
 func main() {
