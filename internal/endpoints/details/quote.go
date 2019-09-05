@@ -41,7 +41,7 @@ func findQuoteByTicker(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	Q := mapGlobalQuoteJSONResponse(Quote.GlobalQuote)
+	Q := mapGlobalQuoteJSON(Quote.GlobalQuote)
 	QuoteJSON, err := json.Marshal(Q)
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func findQuoteByTicker(w http.ResponseWriter, r *http.Request) {
 	w.Write(QuoteJSON)
 }
 
-func mapGlobalQuoteJSONResponse(q models.GlobalQuote) models.Quote {
+func mapGlobalQuoteJSON(q models.GlobalQuote) models.Quote {
 	var quote models.Quote
 
 	quote.Change = q.Change
