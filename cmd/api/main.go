@@ -1,7 +1,9 @@
 package main
 
-import(
+import (
 	"net/http"
+
+	"github.com/stock-details-api/internal/routes"
 	"github.com/stock-details-api/internal/utils"
 )
 

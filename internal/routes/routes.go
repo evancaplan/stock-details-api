@@ -1,18 +1,19 @@
 package routes
 
 import (
-	"github.com/stock-details-api/internal/endpoints/details"
-	"github.com/stock-details-api/internal/utils"
-	"github.com/go-chi/render"
-	"github.com/go-chi/chi/middleware"
 	"net/http"
 	"strings"
-	"github.com/go-chi/cors"
+
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
+	"github.com/go-chi/render"
+	"github.com/stock-details-api/internal/endpoints/details"
+	"github.com/stock-details-api/internal/utils"
 )
 
 func Routes() *chi.Mux {
-	
+
 	log := utils.GetLogger()
 	log.Info("in routes/Routes(), initializing new chi router")
 	router := chi.NewRouter()
