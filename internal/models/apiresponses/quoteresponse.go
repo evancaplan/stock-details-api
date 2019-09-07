@@ -1,4 +1,4 @@
-package models
+package apiresponses
 
 type QuoteResponse struct {
 	GlobalQuote struct {

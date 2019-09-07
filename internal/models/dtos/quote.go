@@ -1,7 +1,8 @@
-package models
+package dtos
 
 type Quote struct {
 	Symbol           string `json:"symbol"`
+	Name             string `json:"name"`
 	Open             string `json:"open"`
 	High             string `json:"high"`
 	Low              string `json:"loq"`
