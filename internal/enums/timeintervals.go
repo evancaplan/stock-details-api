@@ -9,18 +9,19 @@ const (
 	WeeklyAdjusted
 	Monthly
 	MonthlyAdjusted
+	Intraday
 )
 
 func (ti TimeInterval) String() string {
-	return [...]string{"daily", "daily-adjusted", "weekly", "weekly-adjusted", "monthly", "monthly-adjusted"}[ti]
+	return [...]string{"daily", "daily-adjusted", "weekly", "weekly-adjusted", "monthly", "monthly-adjusted", "intraday"}[ti]
 }
 
 func (ti TimeInterval) Endpoint() string {
-	return [...]string{"TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED", "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED"}[ti]
+	return [...]string{"TIME_SERIES_DAILY", "TIME_SERIES_DAILY_ADJUSTED", "TIME_SERIES_WEEKLY", "TIME_SERIES_WEEKLY_ADJUSTED", "TIME_SERIES_MONTHLY", "TIME_SERIES_MONTHLY_ADJUSTED", "TIME_SERIES_INTRADAY"}[ti]
 }
 
 func (ti TimeInterval) TimeSeriesKey() string {
-	return [...]string{"Time Series (Daily)", "Time Series (Daily)", "Weekly Time Series", "Weekly Time Series", "Monthly Time Series", "Monthly Time Series"}[ti]
+	return [...]string{"Time Series (Daily)", "Time Series (Daily)", "Weekly Time Series", "Weekly Time Series", "Monthly Time Series", "Monthly Time Series", ""}[ti]
 }
 
 func GetTimeSeriesKey(interval string) string {

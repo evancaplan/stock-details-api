@@ -11,7 +11,6 @@ import (
 	mapper "github.com/stock-details-api/internal/models/mappers"
 
 	"github.com/go-chi/chi"
-	"github.com/stock-details-api/internal/constants"
 	"github.com/stock-details-api/internal/utils"
 )
 
@@ -23,8 +22,8 @@ func findIntradayTimeSeriesByTicker(w http.ResponseWriter, r *http.Request) {
 	ticker := (chi.URLParam(r, "ticker"))
 	interval := (chi.URLParam(r, "interval"))
 
-	if interval == enums.Daily.String() || interval == enums.DailyAdjusted.String() {
-		findDailyTimeSeriesByTicker(w, ticker, interval)
+	if interval == enums.OneMin.String() {
+		findOneMinTimeSeriesByTicker(w, ticker, interval)
 	}
 	if interval == enums.Weekly.String() || interval == enums.WeeklyAdjusted.String() {
 		findWeeklyTimeSeriesByTicker(w, ticker, interval)
@@ -34,7 +33,51 @@ func findIntradayTimeSeriesByTicker(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func findDailyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval string) {
+func findOneMinTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval string) {
+
+	log := utils.GetLogger()
+	log.Info("details.findOneMinTimeSeriesByTicker() reached ...")
+
+	println("Get parameters: ticker: ", ticker, " interval: ", interval)
+
+	endpoint := createEndpoint(ticker, interval)
+	dailyClient := http.Client{}
+	req, err := http.NewRequest("GET", endpoint, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	println("Making request to : ", endpoint)
+
+	req.Header.Add("Content-Type", "application/json")
+	resp, err := dailyClient.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	respBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var tsr apiresponses.OneMinute
+	println("Unmarshalling Response ...")
+	err = json.Unmarshal(respBytes, &tsr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	println("Mapping DTOS ...")
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	DetailsJSON, err := json.Marshal(Details)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	w.Write(DetailsJSON)
+}
+
+func findFiveMin(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
 	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
@@ -61,7 +104,7 @@ func findDailyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval 
 		log.Fatal(err)
 	}
 
-	var tsr apiresponses.DailyResponse
+	var tsr apiresponses.FiveMinute
 	println("Unmarshalling Response ...")
 	err = json.Unmarshal(respBytes, &tsr)
 	if err != nil {
@@ -78,7 +121,7 @@ func findDailyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval 
 	w.Write(DetailsJSON)
 }
 
-func findWeeklyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval string) {
+func findFifteenMin(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
 	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
@@ -105,7 +148,7 @@ func findWeeklyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval
 		log.Fatal(err)
 	}
 
-	var tsr apiresponses.WeeklyResponse
+	var tsr apiresponses.FifteenMinute
 	println("Unmarshalling Response ...")
 	err = json.Unmarshal(respBytes, &tsr)
 	if err != nil {
@@ -122,7 +165,7 @@ func findWeeklyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval
 	w.Write(DetailsJSON)
 }
 
-func findMonthlyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval string) {
+func findThirtyMin(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
 	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
@@ -149,7 +192,7 @@ func findMonthlyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interva
 		log.Fatal(err)
 	}
 
-	var tsr apiresponses.MonthlyResponse
+	var tsr apiresponses.ThirtyMinute
 	println("Unmarshalling Response ...")
 	err = json.Unmarshal(respBytes, &tsr)
 	if err != nil {
@@ -166,19 +209,46 @@ func findMonthlyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interva
 	w.Write(DetailsJSON)
 }
 
-func createEndpoint(ticker string, interval string) string {
-	switch interval {
-	default:
-		return constants.BaseAlphaVantageUri + "function=" + enums.Daily.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.DailyAdjusted.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.DailyAdjusted.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.Weekly.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.Weekly.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.WeeklyAdjusted.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.WeeklyAdjusted.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.Monthly.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.Monthly.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.MonthlyAdjusted.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.MonthlyAdjusted.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
+func findSixtyMin(w http.ResponseWriter, ticker string, interval string) {
+
+	log := utils.GetLogger()
+	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
+
+	println("Get parameters: ticker: ", ticker, " interval: ", interval)
+
+	endpoint := createEndpoint(ticker, interval)
+	dailyClient := http.Client{}
+	req, err := http.NewRequest("GET", endpoint, nil)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	println("Making request to : ", endpoint)
+
+	req.Header.Add("Content-Type", "application/json")
+	resp, err := dailyClient.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	respBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var tsr apiresponses.SixtyMinute
+	println("Unmarshalling Response ...")
+	err = json.Unmarshal(respBytes, &tsr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	println("Mapping DTOS ...")
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	DetailsJSON, err := json.Marshal(Details)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	w.Write(DetailsJSON)
 }
