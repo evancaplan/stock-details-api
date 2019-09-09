@@ -1,0 +1,5 @@
+package constants
+
+const LogFileName string = "../../../stock-details-api.log"
+const AlphaVantageApiKey string = "YOUR_API_KEY_HERE"
+const BaseAlphaVantageUri string = "https://www.alphavantage.co/query?"
