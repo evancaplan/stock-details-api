@@ -10,6 +10,7 @@ func Routes() *chi.Mux {
 	log.Info("In details.Routes(), registering new details routes")
 	router := chi.NewRouter()
 	router.Get("/{search}/quote", findQuoteBySearch)
-	router.Get("/{ticker}/daily", findDailyDetails)
+	router.Get("/{ticker}/{interval}", findTimeSeriesByTicker)
+	router.get("/{ticker}/intraday/{interval}", findIntradayTimeSeriesByTicker)
 	return router
 }

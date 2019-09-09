@@ -10,26 +10,25 @@ import (
 	dtos "github.com/stock-details-api/internal/models/dtos"
 )
 
-func MapDailyDTOS(d apiresponses.DailyResponse) []dtos.Daily {
-	var DailyDetails []dtos.Daily
+func MapTimeSeriesDTOS(d apiresponses.Details) []dtos.ChartData {
+	var MappedDetails []dtos.ChartData
 
-	for date, details := range d.TimeSeries {
-		var dailyDetail dtos.Daily
-		dailyDetail.Date = date
-		dailyDetail.High = details.High
-		dailyDetail.Low = details.Low
-		dailyDetail.Open = details.Open
-		dailyDetail.Volume = details.Volume
+	for date, details := range d {
+		var data dtos.ChartData
+		data.Date = date
+		data.High = details.High
+		data.Low = details.Low
+		data.Open = details.Open
 
-		DailyDetails = append(DailyDetails, dailyDetail)
+		MappedDetails = append(MappedDetails, data)
 
 	}
 
-	return sortDTOSNew(DailyDetails)
+	return sortDTOSNew(MappedDetails)
 }
 
-func sortDTOSNew(dtos []dtos.Daily) []dtos.Daily {
-	println("Sorting Daily DTOS...")
+func sortDTOSNew(dtos []dtos.ChartData) []dtos.ChartData {
+	println("Sorting ChartData DTOS...")
 	log := utils.GetLogger()
 
 	layout := "2006-01-02"
