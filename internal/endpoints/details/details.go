@@ -11,6 +11,6 @@ func Routes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Get("/{search}/quote", findQuoteBySearch)
 	router.Get("/{ticker}/{interval}", findTimeSeriesByTicker)
-	router.get("/{ticker}/intraday/{interval}", findIntradayTimeSeriesByTicker)
+	router.Get("/{ticker}/intraday/{interval}", findIntradayTimeSeriesByTicker)
 	return router
 }

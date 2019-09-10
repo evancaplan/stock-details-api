@@ -11,7 +11,7 @@ const (
 )
 
 func (iti IntradayTimeInterval) String() string {
-	return [...]string{"OneMin", "FiveMin", "FifteenMIn", "ThirtyMin", "SixtyMinutes"}[iti]
+	return [...]string{"onemin", "fivemin", "fifteenmin", "thirtymin", "sixtymin"}[iti]
 }
 
 func (iti IntradayTimeInterval) Endpoint() string {
@@ -22,7 +22,7 @@ func (iti IntradayTimeInterval) TimeSeriesKey() string {
 	return [...]string{"Time Series (1min)", "Time Series (5min)", "Time Series (15min)", "Time Series (30min)", "Time Series (60min)"}[iti]
 }
 
-func GetTimeSeriesKey(interval string) string {
+func GetIntradayTimeSeriesKey(interval string) string {
 	switch interval {
 	case OneMin.String():
 		return OneMin.TimeSeriesKey()

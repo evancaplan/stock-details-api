@@ -11,7 +11,6 @@ import (
 	mapper "github.com/stock-details-api/internal/models/mappers"
 
 	"github.com/go-chi/chi"
-	"github.com/stock-details-api/internal/constants"
 	"github.com/stock-details-api/internal/utils"
 )
 
@@ -41,7 +40,7 @@ func findDailyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval 
 
 	println("Get parameters: ticker: ", ticker, " interval: ", interval)
 
-	endpoint := createEndpoint(ticker, interval)
+	endpoint := utils.CreateEndpoint(ticker, interval)
 	dailyClient := http.Client{}
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
@@ -69,7 +68,7 @@ func findDailyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval 
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, true)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -85,7 +84,7 @@ func findWeeklyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval
 
 	println("Get parameters: ticker: ", ticker, " interval: ", interval)
 
-	endpoint := createEndpoint(ticker, interval)
+	endpoint := utils.CreateEndpoint(ticker, interval)
 	dailyClient := http.Client{}
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
@@ -113,7 +112,7 @@ func findWeeklyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, true)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -129,7 +128,7 @@ func findMonthlyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interva
 
 	println("Get parameters: ticker: ", ticker, " interval: ", interval)
 
-	endpoint := createEndpoint(ticker, interval)
+	endpoint := utils.CreateEndpoint(ticker, interval)
 	dailyClient := http.Client{}
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
@@ -157,28 +156,11 @@ func findMonthlyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interva
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, true)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	w.Write(DetailsJSON)
-}
-
-func createEndpoint(ticker string, interval string) string {
-	switch interval {
-	default:
-		return constants.BaseAlphaVantageUri + "function=" + enums.Daily.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.DailyAdjusted.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.DailyAdjusted.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.Weekly.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.Weekly.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.WeeklyAdjusted.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.WeeklyAdjusted.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.Monthly.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.Monthly.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.MonthlyAdjusted.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.MonthlyAdjusted.Endpoint() + "&symbol=" + ticker + "&apikey=" + constants.AlphaVantageApiKey
-	}
 }

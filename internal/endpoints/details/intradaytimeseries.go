@@ -23,24 +23,30 @@ func findIntradayTimeSeriesByTicker(w http.ResponseWriter, r *http.Request) {
 	interval := (chi.URLParam(r, "interval"))
 
 	if interval == enums.OneMin.String() {
-		findOneMinTimeSeriesByTicker(w, ticker, interval)
+		findOneMin(w, ticker, interval)
 	}
-	if interval == enums.Weekly.String() || interval == enums.WeeklyAdjusted.String() {
-		findWeeklyTimeSeriesByTicker(w, ticker, interval)
+	if interval == enums.FiveMin.String() {
+		findFiveMin(w, ticker, interval)
 	}
-	if interval == enums.Monthly.String() || interval == enums.MonthlyAdjusted.String() {
-		findMonthlyTimeSeriesByTicker(w, ticker, interval)
+	if interval == enums.FifteenMin.String() {
+		findFifteenMin(w, ticker, interval)
+	}
+	if interval == enums.ThirtyMin.String() {
+		findThirtyMin(w, ticker, interval)
+	}
+	if interval == enums.SixtyMin.String() {
+		findSixtyMin(w, ticker, interval)
 	}
 }
 
-func findOneMinTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval string) {
+func findOneMin(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
 	log.Info("details.findOneMinTimeSeriesByTicker() reached ...")
 
 	println("Get parameters: ticker: ", ticker, " interval: ", interval)
 
-	endpoint := createEndpoint(ticker, interval)
+	endpoint := utils.CreateEndpoint(ticker, interval)
 	dailyClient := http.Client{}
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
@@ -68,7 +74,7 @@ func findOneMinTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, false)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -84,7 +90,7 @@ func findFiveMin(w http.ResponseWriter, ticker string, interval string) {
 
 	println("Get parameters: ticker: ", ticker, " interval: ", interval)
 
-	endpoint := createEndpoint(ticker, interval)
+	endpoint := utils.CreateEndpoint(ticker, interval)
 	dailyClient := http.Client{}
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
@@ -112,7 +118,7 @@ func findFiveMin(w http.ResponseWriter, ticker string, interval string) {
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, false)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -128,7 +134,7 @@ func findFifteenMin(w http.ResponseWriter, ticker string, interval string) {
 
 	println("Get parameters: ticker: ", ticker, " interval: ", interval)
 
-	endpoint := createEndpoint(ticker, interval)
+	endpoint := utils.CreateEndpoint(ticker, interval)
 	dailyClient := http.Client{}
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
@@ -156,7 +162,7 @@ func findFifteenMin(w http.ResponseWriter, ticker string, interval string) {
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, false)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -172,7 +178,7 @@ func findThirtyMin(w http.ResponseWriter, ticker string, interval string) {
 
 	println("Get parameters: ticker: ", ticker, " interval: ", interval)
 
-	endpoint := createEndpoint(ticker, interval)
+	endpoint := utils.CreateEndpoint(ticker, interval)
 	dailyClient := http.Client{}
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
@@ -200,7 +206,7 @@ func findThirtyMin(w http.ResponseWriter, ticker string, interval string) {
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, false)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -216,7 +222,7 @@ func findSixtyMin(w http.ResponseWriter, ticker string, interval string) {
 
 	println("Get parameters: ticker: ", ticker, " interval: ", interval)
 
-	endpoint := createEndpoint(ticker, interval)
+	endpoint := utils.CreateEndpoint(ticker, interval)
 	dailyClient := http.Client{}
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
@@ -244,7 +250,7 @@ func findSixtyMin(w http.ResponseWriter, ticker string, interval string) {
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, false)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)

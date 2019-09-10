@@ -21,7 +21,7 @@ func (ti TimeInterval) Endpoint() string {
 }
 
 func (ti TimeInterval) TimeSeriesKey() string {
-	return [...]string{"Time Series (Daily)", "Time Series (Daily)", "Weekly Time Series", "Weekly Time Series", "Monthly Time Series", "Monthly Time Series", ""}[ti]
+	return [...]string{"Time Series (Daily)", "Time Series (Daily)", "Weekly Time Series", "Weekly Adjusted Time Series", "Monthly Time Series", "Monthly Adjusted Time Series", ""}[ti]
 }
 
 func GetTimeSeriesKey(interval string) string {
