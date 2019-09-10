@@ -2,7 +2,6 @@ package details
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/stock-details-api/internal/enums"
@@ -38,35 +37,18 @@ func findDailyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval 
 	log := utils.GetLogger()
 	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
 
-	println("Get parameters: ticker: ", ticker, " interval: ", interval)
-
-	endpoint := utils.CreateEndpoint(ticker, interval)
-	dailyClient := http.Client{}
-	req, err := http.NewRequest("GET", endpoint, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	println("Making request to : ", endpoint)
-
-	req.Header.Add("Content-Type", "application/json")
-	resp, err := dailyClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	respBytes, err := ioutil.ReadAll(resp.Body)
+	respBytes, err := getResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var tsr apiresponses.DailyResponse
 	println("Unmarshalling Response ...")
+
 	err = json.Unmarshal(respBytes, &tsr)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	println("Mapping DTOS ...")
 	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, true)
 	DetailsJSON, err := json.Marshal(Details)
@@ -80,32 +62,15 @@ func findDailyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval 
 func findWeeklyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
-	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
+	log.Info("details.findWeeklyTimeSeriesByTicker() reached ...")
 
-	println("Get parameters: ticker: ", ticker, " interval: ", interval)
-
-	endpoint := utils.CreateEndpoint(ticker, interval)
-	dailyClient := http.Client{}
-	req, err := http.NewRequest("GET", endpoint, nil)
+	respBytes, err := getResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	println("Making request to : ", endpoint)
-
-	req.Header.Add("Content-Type", "application/json")
-	resp, err := dailyClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	respBytes, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var tsr apiresponses.WeeklyResponse
 	println("Unmarshalling Response ...")
+	var tsr apiresponses.WeeklyResponse
 	err = json.Unmarshal(respBytes, &tsr)
 	if err != nil {
 		log.Fatal(err)
@@ -122,34 +87,16 @@ func findWeeklyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval
 }
 
 func findMonthlyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval string) {
-
 	log := utils.GetLogger()
-	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
+	log.Info("details.findWeeklyTimeSeriesByTicker() reached ...")
 
-	println("Get parameters: ticker: ", ticker, " interval: ", interval)
-
-	endpoint := utils.CreateEndpoint(ticker, interval)
-	dailyClient := http.Client{}
-	req, err := http.NewRequest("GET", endpoint, nil)
+	respBytes, err := getResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	println("Making request to : ", endpoint)
-
-	req.Header.Add("Content-Type", "application/json")
-	resp, err := dailyClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	respBytes, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var tsr apiresponses.MonthlyResponse
 	println("Unmarshalling Response ...")
+	var tsr apiresponses.MonthlyResponse
 	err = json.Unmarshal(respBytes, &tsr)
 	if err != nil {
 		log.Fatal(err)

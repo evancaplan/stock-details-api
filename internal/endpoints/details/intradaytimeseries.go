@@ -2,7 +2,6 @@ package details
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/stock-details-api/internal/enums"
@@ -42,26 +41,9 @@ func findIntradayTimeSeriesByTicker(w http.ResponseWriter, r *http.Request) {
 func findOneMin(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
-	log.Info("details.findOneMinTimeSeriesByTicker() reached ...")
+	log.Info("details.findOneMin() reached ...")
 
-	println("Get parameters: ticker: ", ticker, " interval: ", interval)
-
-	endpoint := utils.CreateEndpoint(ticker, interval)
-	dailyClient := http.Client{}
-	req, err := http.NewRequest("GET", endpoint, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	println("Making request to : ", endpoint)
-
-	req.Header.Add("Content-Type", "application/json")
-	resp, err := dailyClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	respBytes, err := ioutil.ReadAll(resp.Body)
+	respBytes, err := getResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -86,26 +68,9 @@ func findOneMin(w http.ResponseWriter, ticker string, interval string) {
 func findFiveMin(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
-	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
+	log.Info("details.findFiveMin() reached ...")
 
-	println("Get parameters: ticker: ", ticker, " interval: ", interval)
-
-	endpoint := utils.CreateEndpoint(ticker, interval)
-	dailyClient := http.Client{}
-	req, err := http.NewRequest("GET", endpoint, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	println("Making request to : ", endpoint)
-
-	req.Header.Add("Content-Type", "application/json")
-	resp, err := dailyClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	respBytes, err := ioutil.ReadAll(resp.Body)
+	respBytes, err := getResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -128,28 +93,10 @@ func findFiveMin(w http.ResponseWriter, ticker string, interval string) {
 }
 
 func findFifteenMin(w http.ResponseWriter, ticker string, interval string) {
-
 	log := utils.GetLogger()
-	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
+	log.Info("details.findFifteenMin() reached ...")
 
-	println("Get parameters: ticker: ", ticker, " interval: ", interval)
-
-	endpoint := utils.CreateEndpoint(ticker, interval)
-	dailyClient := http.Client{}
-	req, err := http.NewRequest("GET", endpoint, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	println("Making request to : ", endpoint)
-
-	req.Header.Add("Content-Type", "application/json")
-	resp, err := dailyClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	respBytes, err := ioutil.ReadAll(resp.Body)
+	respBytes, err := getResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -172,28 +119,10 @@ func findFifteenMin(w http.ResponseWriter, ticker string, interval string) {
 }
 
 func findThirtyMin(w http.ResponseWriter, ticker string, interval string) {
-
 	log := utils.GetLogger()
-	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
+	log.Info("details.findThirtyMin() reached ...")
 
-	println("Get parameters: ticker: ", ticker, " interval: ", interval)
-
-	endpoint := utils.CreateEndpoint(ticker, interval)
-	dailyClient := http.Client{}
-	req, err := http.NewRequest("GET", endpoint, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	println("Making request to : ", endpoint)
-
-	req.Header.Add("Content-Type", "application/json")
-	resp, err := dailyClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	respBytes, err := ioutil.ReadAll(resp.Body)
+	respBytes, err := getResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -216,28 +145,10 @@ func findThirtyMin(w http.ResponseWriter, ticker string, interval string) {
 }
 
 func findSixtyMin(w http.ResponseWriter, ticker string, interval string) {
-
 	log := utils.GetLogger()
-	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
+	log.Info("details.findSixtyMin() reached ...")
 
-	println("Get parameters: ticker: ", ticker, " interval: ", interval)
-
-	endpoint := utils.CreateEndpoint(ticker, interval)
-	dailyClient := http.Client{}
-	req, err := http.NewRequest("GET", endpoint, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	println("Making request to : ", endpoint)
-
-	req.Header.Add("Content-Type", "application/json")
-	resp, err := dailyClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	respBytes, err := ioutil.ReadAll(resp.Body)
+	respBytes, err := getResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
