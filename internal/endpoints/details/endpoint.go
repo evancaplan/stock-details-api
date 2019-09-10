@@ -1,4 +1,4 @@
-package utils
+package details
 
 import (
 	"github.com/stock-details-api/internal/constants"
