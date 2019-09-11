@@ -56,7 +56,7 @@ func findOneMin(w http.ResponseWriter, ticker string, interval string) {
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, false)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -83,7 +83,7 @@ func findFiveMin(w http.ResponseWriter, ticker string, interval string) {
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, false)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -109,7 +109,7 @@ func findFifteenMin(w http.ResponseWriter, ticker string, interval string) {
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, false)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -135,7 +135,7 @@ func findThirtyMin(w http.ResponseWriter, ticker string, interval string) {
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, false)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -161,7 +161,7 @@ func findSixtyMin(w http.ResponseWriter, ticker string, interval string) {
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, false)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)

@@ -50,7 +50,7 @@ func findDailyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval 
 		log.Fatal(err)
 	}
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, true)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -77,7 +77,7 @@ func findWeeklyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, true)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
@@ -103,7 +103,7 @@ func findMonthlyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interva
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries, true)
+	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)

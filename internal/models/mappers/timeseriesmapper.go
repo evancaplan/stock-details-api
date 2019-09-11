@@ -10,7 +10,7 @@ import (
 	dtos "github.com/stock-details-api/internal/models/dtos"
 )
 
-func MapTimeSeriesDTOS(d apiresponses.Details, sortFlag bool) []dtos.ChartData {
+func MapTimeSeriesDTOS(d apiresponses.Details) []dtos.ChartData {
 	var MappedDetails []dtos.ChartData
 
 	for date, details := range d {
@@ -23,11 +23,7 @@ func MapTimeSeriesDTOS(d apiresponses.Details, sortFlag bool) []dtos.ChartData {
 		MappedDetails = append(MappedDetails, data)
 
 	}
-
-	if sortFlag == true {
-		return sortDTOSNew(MappedDetails)
-	}
-	return MappedDetails
+	return sortDTOSNew(MappedDetails)
 }
 
 func sortDTOSNew(dtos []dtos.ChartData) []dtos.ChartData {
@@ -43,13 +39,10 @@ func sortDTOSNew(dtos []dtos.ChartData) []dtos.ChartData {
 		}
 
 		timeTwo, err := time.Parse(layout, dtos[j].Date)
-
 		if err != nil {
 			log.Fatal(err)
 		}
 		return timeOne.After(timeTwo)
 	})
-
-	println("breaking here mother fucker")
 	return dtos
 }
