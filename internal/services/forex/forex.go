@@ -1,4 +1,5 @@
-package details
+package forex
+
 
 import (
 	"github.com/go-chi/chi"
@@ -9,8 +10,6 @@ func Routes() *chi.Mux {
 	log := utils.GetLogger()
 	log.Info("In details.Routes(), registering new details routes")
 	router := chi.NewRouter()
-	router.Get("/{search}/quote", findQuoteBySearch)
-	router.Get("/{ticker}/{interval}", findTimeSeriesByTicker)
-	router.Get("/{ticker}/intraday/{interval}", findIntradayTimeSeriesByTicker)
+	router.Get("/{curOne}/{curTwo}/rate", nil)
 	return router
 }

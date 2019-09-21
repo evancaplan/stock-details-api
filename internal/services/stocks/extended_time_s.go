@@ -1,19 +1,26 @@
-package details
+package stocks
 
 import (
 	"encoding/json"
+	"github.com/stock-details-api/internal/services/stocks/util"
 	"net/http"
 
 	"github.com/stock-details-api/internal/enums"
 
-	apiresponses "github.com/stock-details-api/internal/models/apiresponses"
-	mapper "github.com/stock-details-api/internal/models/mappers"
+	"github.com/stock-details-api/internal/services/stocks/models/apiresponses"
+	mapper "github.com/stock-details-api/internal/services/stocks/models/mappers"
 
 	"github.com/go-chi/chi"
 	"github.com/stock-details-api/internal/utils"
 )
 
-func findTimeSeriesByTicker(w http.ResponseWriter, r *http.Request) {
+type ExtendedTime interface {
+	FindTimeSeriesByTicker(w http.ResponseWriter, r *http.Request)
+}
+
+type ExtendedTimeService struct{}
+
+func(ets ExtendedTimeService) FindTimeSeriesByTicker(w http.ResponseWriter, r *http.Request) {
 
 	log := utils.GetLogger()
 	log.Info("details.findTimeSeriesByTicker() reached ...")
@@ -22,22 +29,23 @@ func findTimeSeriesByTicker(w http.ResponseWriter, r *http.Request) {
 	interval := (chi.URLParam(r, "interval"))
 
 	if interval == enums.Daily.String() || interval == enums.DailyAdjusted.String() {
-		findDailyTimeSeriesByTicker(w, ticker, interval)
+		ets.findDaily(w, ticker, interval)
 	}
 	if interval == enums.Weekly.String() || interval == enums.WeeklyAdjusted.String() {
-		findWeeklyTimeSeriesByTicker(w, ticker, interval)
+		ets.findWeekly(w, ticker, interval)
 	}
 	if interval == enums.Monthly.String() || interval == enums.MonthlyAdjusted.String() {
-		findMonthlyTimeSeriesByTicker(w, ticker, interval)
+		ets.findMonthly(w, ticker, interval)
 	}
 }
 
-func findDailyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval string) {
+
+func(ets ExtendedTimeService) findDaily(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
 	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
 
-	respBytes, err := getResponseBytes(ticker, interval)
+	respBytes, err := util.GetResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,12 +67,12 @@ func findDailyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval 
 	w.Write(DetailsJSON)
 }
 
-func findWeeklyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval string) {
+func(ets ExtendedTimeService) findWeekly(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
 	log.Info("details.findWeeklyTimeSeriesByTicker() reached ...")
 
-	respBytes, err := getResponseBytes(ticker, interval)
+	respBytes, err := util.GetResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -86,11 +94,11 @@ func findWeeklyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval
 	w.Write(DetailsJSON)
 }
 
-func findMonthlyTimeSeriesByTicker(w http.ResponseWriter, ticker string, interval string) {
+func(ets ExtendedTimeService) findMonthly(w http.ResponseWriter, ticker string, interval string) {
 	log := utils.GetLogger()
 	log.Info("details.findWeeklyTimeSeriesByTicker() reached ...")
 
-	respBytes, err := getResponseBytes(ticker, interval)
+	respBytes, err := util.GetResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}

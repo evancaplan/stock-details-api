@@ -1,7 +1,7 @@
 package mappers
 
-import dtos "github.com/stock-details-api/internal/models/dtos"
-import apiresponses "github.com/stock-details-api/internal/models/apiresponses"
+import "github.com/stock-details-api/internal/services/stocks/models/dtos"
+import "github.com/stock-details-api/internal/services/stocks/models/apiresponses"
 
 func MapQuoteDTO(q apiresponses.QuoteResponse, name string) dtos.Quote {
 	var quote dtos.Quote

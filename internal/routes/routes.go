@@ -8,7 +8,6 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
-	"github.com/stock-details-api/internal/endpoints/details"
 	"github.com/stock-details-api/internal/utils"
 )
 
@@ -38,7 +37,7 @@ func Routes() *chi.Mux {
 	)
 	router.Use(_cors.Handler)
 	router.Route("/api/v1", func(r chi.Router) {
-		r.Mount("/details", details.Routes())
+		r.Mount("/stocks", StockRoutes())
 	})
 
 	return router

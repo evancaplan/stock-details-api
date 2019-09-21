@@ -1,19 +1,25 @@
-package details
+package stocks
 
 import (
 	"encoding/json"
+	enums2 "github.com/stock-details-api/internal/services/stocks/enums"
+	"github.com/stock-details-api/internal/services/stocks/util"
 	"net/http"
 
-	"github.com/stock-details-api/internal/enums"
-
-	apiresponses "github.com/stock-details-api/internal/models/apiresponses"
-	mapper "github.com/stock-details-api/internal/models/mappers"
+	"github.com/stock-details-api/internal/services/stocks/models/apiresponses"
+	mapper "github.com/stock-details-api/internal/services/stocks/models/mappers"
 
 	"github.com/go-chi/chi"
 	"github.com/stock-details-api/internal/utils"
 )
 
-func findIntradayTimeSeriesByTicker(w http.ResponseWriter, r *http.Request) {
+type Intraday interface {
+	FindIntradayTimeSeriesByTicker(w http.ResponseWriter, r *http.Request)
+}
+
+type IntradayService struct {}
+
+func(is IntradayService) FindIntradayTimeSeriesByTicker(w http.ResponseWriter, r *http.Request) {
 
 	log := utils.GetLogger()
 	log.Info("details.findTimeSeriesByTicker() reached ...")
@@ -21,29 +27,29 @@ func findIntradayTimeSeriesByTicker(w http.ResponseWriter, r *http.Request) {
 	ticker := (chi.URLParam(r, "ticker"))
 	interval := (chi.URLParam(r, "interval"))
 
-	if interval == enums.OneMin.String() {
-		findOneMin(w, ticker, interval)
+	if interval == enums2.OneMin.String() {
+		is.findOneMin(w, ticker, interval)
 	}
-	if interval == enums.FiveMin.String() {
-		findFiveMin(w, ticker, interval)
+	if interval == enums2.FiveMin.String() {
+		is.findFiveMin(w, ticker, interval)
 	}
-	if interval == enums.FifteenMin.String() {
-		findFifteenMin(w, ticker, interval)
+	if interval == enums2.FifteenMin.String() {
+		is.findFifteenMin(w, ticker, interval)
 	}
-	if interval == enums.ThirtyMin.String() {
-		findThirtyMin(w, ticker, interval)
+	if interval == enums2.ThirtyMin.String() {
+		is.findThirtyMin(w, ticker, interval)
 	}
-	if interval == enums.SixtyMin.String() {
-		findSixtyMin(w, ticker, interval)
+	if interval == enums2.SixtyMin.String() {
+		is.findSixtyMin(w, ticker, interval)
 	}
 }
 
-func findOneMin(w http.ResponseWriter, ticker string, interval string) {
+func(is IntradayService) findOneMin(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
 	log.Info("details.findOneMin() reached ...")
 
-	respBytes, err := getResponseBytes(ticker, interval)
+	respBytes, err := util.GetResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,12 +71,12 @@ func findOneMin(w http.ResponseWriter, ticker string, interval string) {
 	w.Write(DetailsJSON)
 }
 
-func findFiveMin(w http.ResponseWriter, ticker string, interval string) {
+func(is IntradayService) findFiveMin(w http.ResponseWriter, ticker string, interval string) {
 
 	log := utils.GetLogger()
 	log.Info("details.findFiveMin() reached ...")
 
-	respBytes, err := getResponseBytes(ticker, interval)
+	respBytes, err := util.GetResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -92,11 +98,11 @@ func findFiveMin(w http.ResponseWriter, ticker string, interval string) {
 	w.Write(DetailsJSON)
 }
 
-func findFifteenMin(w http.ResponseWriter, ticker string, interval string) {
+func(is IntradayService) findFifteenMin(w http.ResponseWriter, ticker string, interval string) {
 	log := utils.GetLogger()
 	log.Info("details.findFifteenMin() reached ...")
 
-	respBytes, err := getResponseBytes(ticker, interval)
+	respBytes, err := util.GetResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -118,11 +124,11 @@ func findFifteenMin(w http.ResponseWriter, ticker string, interval string) {
 	w.Write(DetailsJSON)
 }
 
-func findThirtyMin(w http.ResponseWriter, ticker string, interval string) {
+func(is IntradayService) findThirtyMin(w http.ResponseWriter, ticker string, interval string) {
 	log := utils.GetLogger()
 	log.Info("details.findThirtyMin() reached ...")
 
-	respBytes, err := getResponseBytes(ticker, interval)
+	respBytes, err := util.GetResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -144,11 +150,11 @@ func findThirtyMin(w http.ResponseWriter, ticker string, interval string) {
 	w.Write(DetailsJSON)
 }
 
-func findSixtyMin(w http.ResponseWriter, ticker string, interval string) {
+func(is IntradayService) findSixtyMin(w http.ResponseWriter, ticker string, interval string) {
 	log := utils.GetLogger()
 	log.Info("details.findSixtyMin() reached ...")
 
-	respBytes, err := getResponseBytes(ticker, interval)
+	respBytes, err := util.GetResponseBytes(ticker, interval)
 	if err != nil {
 		log.Fatal(err)
 	}

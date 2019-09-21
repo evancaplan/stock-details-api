@@ -1,4 +1,4 @@
-package details
+package util
 
 import (
 	"io/ioutil"
@@ -7,7 +7,7 @@ import (
 	"github.com/stock-details-api/internal/utils"
 )
 
-func getResponseBytes(ticker string, interval string) ([]byte, error) {
+func GetResponseBytes(ticker string, interval string) ([]byte, error) {
 
 	log := utils.GetLogger()
 

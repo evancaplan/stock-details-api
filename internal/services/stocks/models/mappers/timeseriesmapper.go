@@ -1,8 +1,8 @@
 package mappers
 
 import (
-	apiresponses "github.com/stock-details-api/internal/models/apiresponses"
-	dtos "github.com/stock-details-api/internal/models/dtos"
+	"github.com/stock-details-api/internal/services/stocks/models/apiresponses"
+	"github.com/stock-details-api/internal/services/stocks/models/dtos"
 )
 
 func MapTimeSeriesDTOS(d apiresponses.Details) []dtos.ChartData {

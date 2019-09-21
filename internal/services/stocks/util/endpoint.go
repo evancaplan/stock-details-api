@@ -1,12 +1,12 @@
-package details
+package util
 
 import (
 	"github.com/stock-details-api/internal/constants"
 	"github.com/stock-details-api/internal/enums"
+	enums2 "github.com/stock-details-api/internal/services/stocks/enums"
 )
 
 func CreateEndpoint(ticker string, interval string) string {
-	println(interval + " Suck my clit and balls")
 	if isIntradayTimeSeries(interval) {
 		return createIntradayTimeSeriesEndpoint(ticker, interval)
 	}
@@ -16,25 +16,25 @@ func CreateEndpoint(ticker string, interval string) string {
 }
 
 func isIntradayTimeSeries(interval string) bool {
-	return interval == enums.OneMin.String() ||
-		interval == enums.FiveMin.String() ||
-		interval == enums.FifteenMin.String() ||
-		interval == enums.ThirtyMin.String() ||
-		interval == enums.SixtyMin.String()
+	return interval == enums2.OneMin.String() ||
+		interval == enums2.FiveMin.String() ||
+		interval == enums2.FifteenMin.String() ||
+		interval == enums2.ThirtyMin.String() ||
+		interval == enums2.SixtyMin.String()
 }
 
 func createIntradayTimeSeriesEndpoint(ticker string, interval string) string {
 	switch interval {
-	case enums.FiveMin.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.Intraday.Endpoint() + "&symbol=" + ticker + "&interval=" + enums.FiveMin.Endpoint() + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.FifteenMin.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.Intraday.Endpoint() + "&symbol=" + ticker + "&interval=" + enums.FifteenMin.Endpoint() + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.ThirtyMin.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.Intraday.Endpoint() + "&symbol=" + ticker + "&interval=" + enums.ThirtyMin.Endpoint() + "&apikey=" + constants.AlphaVantageApiKey
-	case enums.SixtyMin.String():
-		return constants.BaseAlphaVantageUri + "function=" + enums.Intraday.Endpoint() + "&symbol=" + ticker + "&interval=" + enums.SixtyMin.Endpoint() + "&apikey=" + constants.AlphaVantageApiKey
+	case enums2.FiveMin.String():
+		return constants.BaseAlphaVantageUri + "function=" + enums.Intraday.Endpoint() + "&symbol=" + ticker + "&interval=" + enums2.FiveMin.Endpoint() + "&apikey=" + constants.AlphaVantageApiKey
+	case enums2.FifteenMin.String():
+		return constants.BaseAlphaVantageUri + "function=" + enums.Intraday.Endpoint() + "&symbol=" + ticker + "&interval=" + enums2.FifteenMin.Endpoint() + "&apikey=" + constants.AlphaVantageApiKey
+	case enums2.ThirtyMin.String():
+		return constants.BaseAlphaVantageUri + "function=" + enums.Intraday.Endpoint() + "&symbol=" + ticker + "&interval=" + enums2.ThirtyMin.Endpoint() + "&apikey=" + constants.AlphaVantageApiKey
+	case enums2.SixtyMin.String():
+		return constants.BaseAlphaVantageUri + "function=" + enums.Intraday.Endpoint() + "&symbol=" + ticker + "&interval=" + enums2.SixtyMin.Endpoint() + "&apikey=" + constants.AlphaVantageApiKey
 	default:
-		return constants.BaseAlphaVantageUri + "function=" + enums.Intraday.Endpoint() + "&symbol=" + ticker + "&interval=" + enums.OneMin.Endpoint() + "&apikey=" + constants.AlphaVantageApiKey
+		return constants.BaseAlphaVantageUri + "function=" + enums.Intraday.Endpoint() + "&symbol=" + ticker + "&interval=" + enums2.OneMin.Endpoint() + "&apikey=" + constants.AlphaVantageApiKey
 	}
 }
 
