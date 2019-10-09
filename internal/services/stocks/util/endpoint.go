@@ -6,11 +6,10 @@ import (
 	enums2 "github.com/stock-details-api/internal/services/stocks/enums"
 )
 
-func CreateEndpoint(ticker string, interval string) string {
+func CreateTimeSeriesEndpoint(ticker string, interval string) string {
 	if isIntradayTimeSeries(interval) {
 		return createIntradayTimeSeriesEndpoint(ticker, interval)
 	}
-	println("started from the top now we here")
 	return createTimeSeriesEndpoint(ticker, interval)
 
 }

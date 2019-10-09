@@ -13,7 +13,7 @@ func GetResponseBytes(ticker string, interval string) ([]byte, error) {
 
 	println("Get parameters: ticker: ", ticker, " interval: ", interval)
 
-	endpoint := CreateEndpoint(ticker, interval)
+	endpoint := CreateTimeSeriesEndpoint(ticker, interval)
 	dailyClient := http.Client{}
 	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
