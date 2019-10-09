@@ -8,8 +8,8 @@ import (
 
 func Routes() *chi.Mux {
 	log := utils.GetLogger()
-	log.Info("In details.Routes(), registering new details routes")
+	log.Info("In details.Routes(), registering new details handlers")
 	router := chi.NewRouter()
-	router.Get("/{curOne}/{curTwo}/rate", nil)
+	router.Get("/{curOne}/{curTwo}/rate", ExchangeRateService{}.getExchangeRate)
 	return router
 }

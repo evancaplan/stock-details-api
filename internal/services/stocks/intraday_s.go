@@ -13,7 +13,7 @@ import (
 	"github.com/stock-details-api/internal/utils"
 )
 
-type Intraday interface {
+type IntradayStock interface {
 	FindIntradayTimeSeriesByTicker(w http.ResponseWriter, r *http.Request)
 }
 
@@ -24,27 +24,42 @@ func(is IntradayService) FindIntradayTimeSeriesByTicker(w http.ResponseWriter, r
 	log := utils.GetLogger()
 	log.Info("details.findTimeSeriesByTicker() reached ...")
 
-	ticker := (chi.URLParam(r, "ticker"))
-	interval := (chi.URLParam(r, "interval"))
+	ticker := chi.URLParam(r, "ticker")
+	interval := chi.URLParam(r, "interval")
 
 	if interval == enums2.OneMin.String() {
-		is.findOneMin(w, ticker, interval)
+		_, err := w.Write(is.findOneMin(ticker, interval))
+		 if err != nil {
+		 	log.Fatal(err)
+		 }
 	}
 	if interval == enums2.FiveMin.String() {
-		is.findFiveMin(w, ticker, interval)
+		_, err := w.Write(is.findFiveMin(ticker, interval))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if interval == enums2.FifteenMin.String() {
-		is.findFifteenMin(w, ticker, interval)
+		_, err := w.Write(is.findFifteenMin(w, ticker, interval))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if interval == enums2.ThirtyMin.String() {
-		is.findThirtyMin(w, ticker, interval)
+		_, err := w.Write(is.findThirtyMin(ticker, interval))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if interval == enums2.SixtyMin.String() {
-		is.findSixtyMin(w, ticker, interval)
+		_, err :=w.Write(is.findSixtyMin(ticker, interval))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
-func(is IntradayService) findOneMin(w http.ResponseWriter, ticker string, interval string) {
+func(is IntradayService) findOneMin(ticker string, interval string) []byte {
 
 	log := utils.GetLogger()
 	log.Info("details.findOneMin() reached ...")
@@ -62,16 +77,16 @@ func(is IntradayService) findOneMin(w http.ResponseWriter, ticker string, interv
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.TimeSeriesMapper{}.Map(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	w.Write(DetailsJSON)
+	return DetailsJSON
 }
 
-func(is IntradayService) findFiveMin(w http.ResponseWriter, ticker string, interval string) {
+func(is IntradayService) findFiveMin(ticker string, interval string) []byte {
 
 	log := utils.GetLogger()
 	log.Info("details.findFiveMin() reached ...")
@@ -89,16 +104,16 @@ func(is IntradayService) findFiveMin(w http.ResponseWriter, ticker string, inter
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.TimeSeriesMapper{}.Map(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	w.Write(DetailsJSON)
+	return DetailsJSON
 }
 
-func(is IntradayService) findFifteenMin(w http.ResponseWriter, ticker string, interval string) {
+func(is IntradayService) findFifteenMin(w http.ResponseWriter, ticker string, interval string) []byte {
 	log := utils.GetLogger()
 	log.Info("details.findFifteenMin() reached ...")
 
@@ -115,16 +130,16 @@ func(is IntradayService) findFifteenMin(w http.ResponseWriter, ticker string, in
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.TimeSeriesMapper{}.Map(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	w.Write(DetailsJSON)
+	return DetailsJSON
 }
 
-func(is IntradayService) findThirtyMin(w http.ResponseWriter, ticker string, interval string) {
+func(is IntradayService) findThirtyMin(ticker string, interval string) []byte {
 	log := utils.GetLogger()
 	log.Info("details.findThirtyMin() reached ...")
 
@@ -141,16 +156,16 @@ func(is IntradayService) findThirtyMin(w http.ResponseWriter, ticker string, int
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.TimeSeriesMapper{}.Map(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	w.Write(DetailsJSON)
+	return DetailsJSON
 }
 
-func(is IntradayService) findSixtyMin(w http.ResponseWriter, ticker string, interval string) {
+func(is IntradayService) findSixtyMin(ticker string, interval string) []byte {
 	log := utils.GetLogger()
 	log.Info("details.findSixtyMin() reached ...")
 
@@ -167,11 +182,10 @@ func(is IntradayService) findSixtyMin(w http.ResponseWriter, ticker string, inte
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.TimeSeriesMapper{}.Map(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	w.Write(DetailsJSON)
+	return DetailsJSON
 }

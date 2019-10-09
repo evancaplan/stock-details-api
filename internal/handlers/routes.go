@@ -1,4 +1,4 @@
-package routes
+package handlers
 
 import (
 	"net/http"
@@ -14,7 +14,7 @@ import (
 func Routes() *chi.Mux {
 
 	log := utils.GetLogger()
-	log.Info("in routes/Routes(), initializing new chi router")
+	log.Info("in handlers/Routes(), initializing new chi router")
 	router := chi.NewRouter()
 
 	log.Info("Setting cors values...")
@@ -45,7 +45,7 @@ func Routes() *chi.Mux {
 }
 
 func allowedOriginFunc(r *http.Request, origin string) bool {
-	originsWhitelist := []string{"bwssolutions.com", "localhost"}
+	originsWhitelist := []string{"localhost"}
 	for _, whitelistedOrigin := range originsWhitelist {
 		if strings.Contains(origin, whitelistedOrigin) {
 			return true

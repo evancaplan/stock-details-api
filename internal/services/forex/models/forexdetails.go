@@ -1,4 +1,4 @@
-package apiresponses
+package models
 
 type ForexDetails struct {
 	fromCode string `1. json:"From_Ccurrency Code`

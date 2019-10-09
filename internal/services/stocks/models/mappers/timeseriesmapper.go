@@ -5,7 +5,9 @@ import (
 	"github.com/stock-details-api/internal/services/stocks/models/dtos"
 )
 
-func MapTimeSeriesDTOS(d apiresponses.Details) []dtos.ChartData {
+type TimeSeriesMapper struct{}
+
+func (t TimeSeriesMapper) Map(d apiresponses.Details) []dtos.ChartData {
 	var MappedDetails []dtos.ChartData
 
 	for date, details := range d {

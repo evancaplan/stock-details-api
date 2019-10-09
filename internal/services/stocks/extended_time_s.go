@@ -14,7 +14,7 @@ import (
 	"github.com/stock-details-api/internal/utils"
 )
 
-type ExtendedTime interface {
+type ExtendedTimeStock interface {
 	FindTimeSeriesByTicker(w http.ResponseWriter, r *http.Request)
 }
 
@@ -25,22 +25,31 @@ func(ets ExtendedTimeService) FindTimeSeriesByTicker(w http.ResponseWriter, r *h
 	log := utils.GetLogger()
 	log.Info("details.findTimeSeriesByTicker() reached ...")
 
-	ticker := (chi.URLParam(r, "ticker"))
-	interval := (chi.URLParam(r, "interval"))
+	ticker := chi.URLParam(r, "ticker")
+	interval := chi.URLParam(r, "interval")
 
 	if interval == enums.Daily.String() || interval == enums.DailyAdjusted.String() {
-		ets.findDaily(w, ticker, interval)
+		_, err := w.Write(ets.findDaily(ticker, interval))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if interval == enums.Weekly.String() || interval == enums.WeeklyAdjusted.String() {
-		ets.findWeekly(w, ticker, interval)
+		_, err := w.Write(ets.findWeekly(ticker, interval))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if interval == enums.Monthly.String() || interval == enums.MonthlyAdjusted.String() {
-		ets.findMonthly(w, ticker, interval)
+		_, err := w.Write(ets.findMonthly(ticker, interval))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
 
-func(ets ExtendedTimeService) findDaily(w http.ResponseWriter, ticker string, interval string) {
+func(ets ExtendedTimeService) findDaily(ticker string, interval string) []byte {
 
 	log := utils.GetLogger()
 	log.Info("details.findDailyTimeSeriesByTicker() reached ...")
@@ -58,16 +67,16 @@ func(ets ExtendedTimeService) findDaily(w http.ResponseWriter, ticker string, in
 		log.Fatal(err)
 	}
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.TimeSeriesMapper{}.Map(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	w.Write(DetailsJSON)
+	return DetailsJSON
 }
 
-func(ets ExtendedTimeService) findWeekly(w http.ResponseWriter, ticker string, interval string) {
+func(ets ExtendedTimeService) findWeekly(ticker string, interval string) []byte {
 
 	log := utils.GetLogger()
 	log.Info("details.findWeeklyTimeSeriesByTicker() reached ...")
@@ -85,16 +94,16 @@ func(ets ExtendedTimeService) findWeekly(w http.ResponseWriter, ticker string, i
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.TimeSeriesMapper{}.Map(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	w.Write(DetailsJSON)
+	return DetailsJSON
 }
 
-func(ets ExtendedTimeService) findMonthly(w http.ResponseWriter, ticker string, interval string) {
+func(ets ExtendedTimeService) findMonthly(ticker string, interval string) []byte {
 	log := utils.GetLogger()
 	log.Info("details.findWeeklyTimeSeriesByTicker() reached ...")
 
@@ -111,11 +120,11 @@ func(ets ExtendedTimeService) findMonthly(w http.ResponseWriter, ticker string, 
 	}
 
 	println("Mapping DTOS ...")
-	var Details = mapper.MapTimeSeriesDTOS(tsr.TimeSeries)
+	var Details = mapper.TimeSeriesMapper{}.Map(tsr.TimeSeries)
 	DetailsJSON, err := json.Marshal(Details)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	w.Write(DetailsJSON)
+	return DetailsJSON
 }

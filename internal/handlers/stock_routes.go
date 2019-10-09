@@ -1,4 +1,4 @@
-package routes
+package handlers
 
 import (
 	"github.com/go-chi/chi"
@@ -8,7 +8,7 @@ import (
 
 func StockRoutes() *chi.Mux {
 	log := utils.GetLogger()
-	log.Info("In details.Routes(), registering new details routes")
+	log.Info("In details.Routes(), registering new details handlers")
 	router := chi.NewRouter()
 	router.Get("/{search}/quote", stocks.QuoteService{}.FindQuote)
 	router.Get("/{ticker}/{interval}", stocks.ExtendedTimeService{}.FindTimeSeriesByTicker)
